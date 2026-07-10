@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Layout } from './components/Layout';
@@ -6,8 +7,31 @@ import { UserFormDialog } from './components/UserFormDialog';
 import { UsersTable } from './components/UsersTable';
 import { ErrorAlert } from './components/ErrorAlert';
 import { useUserManagement } from './hooks/useUserManagement';
+import { LoginPage } from './features/auth/components/LoginPage';
+import { ProtectedRoute } from './features/auth/components/ProtectedRoute';
 
 function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          <Route index element={<Navigate to="/users" replace />} />
+          <Route path="/users" element={<UserManagementPage />} />
+          <Route path="/dashboard" element={<DashboardPlaceholder />} />
+          <Route path="/settings" element={<SettingsPlaceholder />} />
+        </Route>
+      </Route>
+      <Route path="*" element={<Navigate to="/users" replace />} />
+    </Routes>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  User Management Page                                              */
+/* ------------------------------------------------------------------ */
+
+function UserManagementPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const { users, error, addUser, updateUser, deleteUser, clearError } = useUserManagement();
@@ -43,7 +67,7 @@ function App() {
   };
 
   return (
-    <Layout>
+    <>
       <ErrorAlert error={error} onClose={clearError} />
 
       {/* Header */}
@@ -88,7 +112,33 @@ function App() {
           Total users: <strong>{users.length}</strong>
         </Typography>
       </Box>
-    </Layout>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Placeholder pages for future sprints                              */
+/* ------------------------------------------------------------------ */
+
+function DashboardPlaceholder() {
+  return (
+    <Box sx={{ textAlign: 'center', py: 8 }}>
+      <Typography variant="h2">Dashboard</Typography>
+      <Typography variant="body1" sx={{ mt: 1, color: '#6b6375' }}>
+        Dashboard coming soon.
+      </Typography>
+    </Box>
+  );
+}
+
+function SettingsPlaceholder() {
+  return (
+    <Box sx={{ textAlign: 'center', py: 8 }}>
+      <Typography variant="h2">Settings</Typography>
+      <Typography variant="body1" sx={{ mt: 1, color: '#6b6375' }}>
+        Settings coming soon.
+      </Typography>
+    </Box>
   );
 }
 
