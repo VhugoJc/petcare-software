@@ -9,6 +9,7 @@ import { ErrorAlert } from './components/ErrorAlert';
 import { useUserManagement } from './hooks/useUserManagement';
 import { LoginPage } from './features/auth/components/LoginPage';
 import { ProtectedRoute } from './features/auth/components/ProtectedRoute';
+import { DashboardPage } from './features/dashboard/components/DashboardPage';
 
 function App() {
   return (
@@ -16,9 +17,9 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
-          <Route index element={<Navigate to="/users" replace />} />
+          <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/users" element={<UserManagementPage />} />
-          <Route path="/dashboard" element={<DashboardPlaceholder />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/settings" element={<SettingsPlaceholder />} />
         </Route>
       </Route>
@@ -119,17 +120,6 @@ function UserManagementPage() {
 /* ------------------------------------------------------------------ */
 /*  Placeholder pages for future sprints                              */
 /* ------------------------------------------------------------------ */
-
-function DashboardPlaceholder() {
-  return (
-    <Box sx={{ textAlign: 'center', py: 8 }}>
-      <Typography variant="h2">Dashboard</Typography>
-      <Typography variant="body1" sx={{ mt: 1, color: '#6b6375' }}>
-        Dashboard coming soon.
-      </Typography>
-    </Box>
-  );
-}
 
 function SettingsPlaceholder() {
   return (
