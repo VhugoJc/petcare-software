@@ -13,6 +13,7 @@ import { DashboardPage } from './features/dashboard/components/DashboardPage';
 import { OwnersPage } from './features/owners/components/OwnersPage';
 import { PetsPage } from './features/pets/components/PetsPage';
 import { PetProfilePage } from './features/pets/components/PetProfilePage';
+import { AppointmentsPage } from './features/appointments/components/AppointmentsPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/owners" element={<OwnersPage />} />
           <Route path="/pets" element={<PetsPage />} />
           <Route path="/pets/:id" element={<PetProfilePage />} />
+          <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/settings" element={<SettingsPlaceholder />} />
         </Route>

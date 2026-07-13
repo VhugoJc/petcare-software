@@ -3,11 +3,13 @@ import { Chip } from '@mui/material';
 type StatusVariant = 'success' | 'warning' | 'info' | 'error' | 'default';
 
 const STATUS_COLORS: Record<string, StatusVariant> = {
+  scheduled: 'info',
   confirmed: 'info',
   'checked-in': 'success',
   'in-progress': 'warning',
   completed: 'success',
   cancelled: 'error',
+  'no-show': 'error',
   pending: 'warning',
   paid: 'success',
   overdue: 'error',
