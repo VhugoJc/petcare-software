@@ -1,6 +1,7 @@
 export type AppointmentStatus = 'confirmed' | 'checked-in' | 'in-progress' | 'completed' | 'cancelled';
 
-export type Species = 'dog' | 'cat' | 'bird' | 'rabbit' | 'other';
+// Re-exported from shared types for cross-module consistency
+export type { Species } from '../../../types';
 
 export interface Appointment {
   id: string;

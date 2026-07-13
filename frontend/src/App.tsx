@@ -11,6 +11,8 @@ import { LoginPage } from './features/auth/components/LoginPage';
 import { ProtectedRoute } from './features/auth/components/ProtectedRoute';
 import { DashboardPage } from './features/dashboard/components/DashboardPage';
 import { OwnersPage } from './features/owners/components/OwnersPage';
+import { PetsPage } from './features/pets/components/PetsPage';
+import { PetProfilePage } from './features/pets/components/PetProfilePage';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/users" element={<UserManagementPage />} />
           <Route path="/owners" element={<OwnersPage />} />
+          <Route path="/pets" element={<PetsPage />} />
+          <Route path="/pets/:id" element={<PetProfilePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/settings" element={<SettingsPlaceholder />} />
         </Route>
