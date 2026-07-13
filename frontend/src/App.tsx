@@ -10,6 +10,7 @@ import { useUserManagement } from './hooks/useUserManagement';
 import { LoginPage } from './features/auth/components/LoginPage';
 import { ProtectedRoute } from './features/auth/components/ProtectedRoute';
 import { DashboardPage } from './features/dashboard/components/DashboardPage';
+import { OwnersPage } from './features/owners/components/OwnersPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="/users" element={<UserManagementPage />} />
+          <Route path="/owners" element={<OwnersPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/settings" element={<SettingsPlaceholder />} />
         </Route>

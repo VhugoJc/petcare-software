@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Divider, Avatar, Menu, MenuItem } from '@mui/material';
-import { Dashboard, People, Settings, Logout, Menu as MenuIcon } from '@mui/icons-material';
+import { Dashboard, People, Settings, Logout, Menu as MenuIcon, Pets } from '@mui/icons-material';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../features/auth/hooks/useAuth';
@@ -7,6 +7,7 @@ import { useAuth } from '../features/auth/hooks/useAuth';
 const DRAWER_WIDTH = 260;
 const MENU_ITEMS = [
   { label: 'Dashboard', icon: <Dashboard />, id: 'dashboard', path: '/dashboard' },
+  { label: 'Owners', icon: <Pets />, id: 'owners', path: '/owners' },
   { label: 'Users', icon: <People />, id: 'users', path: '/users' },
   { label: 'Settings', icon: <Settings />, id: 'settings', path: '/settings' },
 ];
