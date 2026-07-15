@@ -25,15 +25,22 @@ export async function connectDatabase(): Promise<void> {
     logger.error('MongoDB connection error', { error: err.message });
   });
 
+  // If the URI already contains credentials, don't pass user/pass separately
+  const hasCredentials = uri.includes('@');
+  const mongooseOptions: mongoose.ConnectOptions = {
+    dbName,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+  };
+
+  if (!hasCredentials) {
+    mongooseOptions.authSource = 'admin';
+    mongooseOptions.user = config.MONGO_USERNAME || undefined;
+    mongooseOptions.pass = config.MONGO_PASSWORD || undefined;
+  }
+
   try {
-    await mongoose.connect(uri, {
-      dbName,
-      authSource: 'admin',
-      user: config.MONGO_USERNAME || undefined,
-      pass: config.MONGO_PASSWORD || undefined,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
+    await mongoose.connect(uri, mongooseOptions);
   } catch (error) {
     logger.error('Failed to connect to MongoDB', {
       error: error instanceof Error ? error.message : 'Unknown error',

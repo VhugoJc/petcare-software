@@ -2,6 +2,7 @@ import { createApp } from './app';
 import { loadConfig, getConfig } from './config/env';
 import { createLogger, getLogger } from './config/logger';
 import { connectDatabase, disconnectDatabase } from './config/database';
+import { seedAdminUser } from './features/auth/auth.service';
 
 async function main(): Promise<void> {
   // 1. Load configuration (exits early if env vars are invalid)
@@ -27,7 +28,10 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  // 4. Create and start Express app
+  // 4. Seed default admin user (development only)
+  await seedAdminUser();
+
+  // 5. Create and start Express app
   const app = createApp();
 
   const server = app.listen(config.PORT, config.HOST, () => {

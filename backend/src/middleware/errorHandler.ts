@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
+import { ZodError } from 'zod';
 import { AppError } from '../errors/AppError';
 import { getConfig } from '../config/env';
 import { getLogger } from '../config/logger';
@@ -7,7 +8,7 @@ import { getLogger } from '../config/logger';
 /**
  * Global error handler middleware.
  *
- * - Converts Mongoose errors into AppError with user-friendly messages.
+ * - Converts Mongoose and Zod errors into AppError with user-friendly messages.
  * - Returns a consistent JSON envelope.
  * - In development, includes stack traces for debugging.
  */
@@ -23,8 +24,15 @@ export function errorHandler(
 
   let error: AppError;
 
-  // Convert known Mongoose errors
-  if (err instanceof mongoose.Error.ValidationError) {
+  // Convert known errors
+  if (err instanceof ZodError) {
+    const details: Record<string, unknown> = {};
+    for (const issue of err.issues) {
+      const path = issue.path.join('.');
+      details[path] = issue.message;
+    }
+    error = AppError.badRequest('Validation failed', details);
+  } else if (err instanceof mongoose.Error.ValidationError) {
     const details: Record<string, unknown> = {};
     for (const [field, ve] of Object.entries(err.errors)) {
       details[field] = ve.message;
