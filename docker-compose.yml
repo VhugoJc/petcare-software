@@ -1,0 +1,79 @@
+# =============================================================================
+# PetCare Software — Docker Compose Configuration
+# =============================================================================
+# This compose file defines the database infrastructure for the PetCare
+# application. It is designed to be extended when the Node.js backend is
+# added in a future sprint.
+#
+# Usage:
+#   docker compose up -d              # Start MongoDB
+#   docker compose down               # Stop all services
+#   docker compose down -v            # Stop and delete volumes (⚠️ loses data)
+#   docker compose logs -f petcare-mongo  # Tail MongoDB logs
+#
+# Future backend integration:
+#   Add a `backend` service below that:
+#     - Builds from ./backend/Dockerfile
+#     - Joins petcare-network
+#     - Reads MONGO_URI from .env
+#     - Depends on petcare-mongo (condition: service_healthy)
+# =============================================================================
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # MongoDB — Primary Database
+  # ---------------------------------------------------------------------------
+  petcare-mongo:
+    image: mongo:${MONGO_VERSION:-7.0}
+    container_name: petcare-mongo
+    hostname: petcare-mongo
+    restart: unless-stopped
+
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+
+    volumes:
+      # Persistent data storage (Docker-managed named volume)
+      - mongo-data:/data/db
+      # Initialization scripts (run only on first database creation)
+      - ./docker/mongo/init:/docker-entrypoint-initdb.d:ro
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-petcare_user}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-petcare_dev_password}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-petcare}
+
+    healthcheck:
+      test: |
+        mongosh --quiet --eval '
+          db.runCommand({ ping: 1 }).ok === 1 ? quit(0) : quit(1)
+        '
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    networks:
+      - petcare-network
+
+    command: ["mongod"]
+
+# ---------------------------------------------------------------------------
+# Named Volumes
+# ---------------------------------------------------------------------------
+volumes:
+  mongo-data:
+    name: petcare_mongo_data
+    driver: local
+
+# ---------------------------------------------------------------------------
+# Networks
+# ---------------------------------------------------------------------------
+networks:
+  petcare-network:
+    name: petcare_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/16

@@ -1,0 +1,255 @@
+// =============================================================================
+// PetCare Software — MongoDB Initialization Script
+// =============================================================================
+// This script runs once when MongoDB is first created (empty /data/db).
+// It creates the application database, collections, indexes, and seed data.
+//
+// Environment variables available:
+//   MONGO_INITDB_ROOT_USERNAME — Root admin user
+//   MONGO_INITDB_ROOT_PASSWORD — Root admin password
+//   MONGO_INITDB_DATABASE     — Target database name (petcare)
+// =============================================================================
+
+// Switch to the application database
+db = db.getSiblingDB(process.env.MONGO_INITDB_DATABASE || 'petcare');
+
+// =============================================================================
+// Collections Creation
+// =============================================================================
+// MongoDB creates collections lazily on first insert, but we create them
+// explicitly here to define validation schemas from the start.
+
+const collections = [
+  {
+    name: 'users',
+    options: {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          required: ['email', 'firstName', 'lastName', 'role'],
+          properties: {
+            email: {
+              bsonType: 'string',
+              pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
+              description: 'must be a valid email address'
+            },
+            firstName: { bsonType: 'string', description: 'must be a string' },
+            lastName: { bsonType: 'string', description: 'must be a string' },
+            role: {
+              enum: ['admin', 'veterinarian', 'receptionist', 'manager'],
+              description: 'must be a valid user role'
+            },
+            isActive: { bsonType: 'bool', description: 'must be a boolean' }
+          }
+        }
+      }
+    }
+  },
+  {
+    name: 'owners',
+    options: {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          required: ['firstName', 'lastName', 'email', 'phone'],
+          properties: {
+            firstName: { bsonType: 'string' },
+            lastName: { bsonType: 'string' },
+            email: { bsonType: 'string' },
+            phone: { bsonType: 'string' },
+            address: {
+              bsonType: 'object',
+              properties: {
+                street: { bsonType: 'string' },
+                city: { bsonType: 'string' },
+                state: { bsonType: 'string' },
+                zipCode: { bsonType: 'string' }
+              }
+            },
+            isActive: { bsonType: 'bool' }
+          }
+        }
+      }
+    }
+  },
+  {
+    name: 'pets',
+    options: {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          required: ['name', 'species', 'ownerId'],
+          properties: {
+            name: { bsonType: 'string' },
+            species: {
+              enum: ['dog', 'cat', 'bird', 'rabbit', 'hamster', 'reptile', 'other'],
+              description: 'must be a valid species'
+            },
+            breed: { bsonType: 'string' },
+            birthDate: { bsonType: 'date' },
+            weight: { bsonType: 'double' },
+            color: { bsonType: 'string' },
+            gender: { enum: ['male', 'female', 'unknown'] },
+            isNeutered: { bsonType: 'bool' },
+            microchipId: { bsonType: 'string' },
+            ownerId: { bsonType: 'objectId', description: 'reference to owners collection' },
+            isActive: { bsonType: 'bool' }
+          }
+        }
+      }
+    }
+  },
+  {
+    name: 'appointments',
+    options: {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          required: ['petId', 'ownerId', 'date', 'time', 'reason', 'status', 'veterinarianId'],
+          properties: {
+            petId: { bsonType: 'objectId' },
+            ownerId: { bsonType: 'objectId' },
+            date: { bsonType: 'date' },
+            time: { bsonType: 'string' },
+            reason: { bsonType: 'string' },
+            status: {
+              enum: ['scheduled', 'confirmed', 'in-progress', 'completed', 'cancelled', 'no-show'],
+              description: 'must be a valid appointment status'
+            },
+            veterinarianId: { bsonType: 'objectId' },
+            notes: { bsonType: 'string' },
+            isActive: { bsonType: 'bool' }
+          }
+        }
+      }
+    }
+  },
+  {
+    name: 'medical_records',
+    options: {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          required: ['petId', 'appointmentId', 'diagnosis', 'treatment'],
+          properties: {
+            petId: { bsonType: 'objectId' },
+            appointmentId: { bsonType: 'objectId' },
+            veterinarianId: { bsonType: 'objectId' },
+            diagnosis: { bsonType: 'string' },
+            treatment: { bsonType: 'string' },
+            prescription: {
+              bsonType: 'object',
+              properties: {
+                medicationName: { bsonType: 'string' },
+                dosage: { bsonType: 'string' },
+                frequency: { bsonType: 'string' },
+                duration: { bsonType: 'string' }
+              }
+            },
+            notes: { bsonType: 'string' },
+            createdAt: { bsonType: 'date' }
+          }
+        }
+      }
+    }
+  },
+  {
+    name: 'inventory',
+    options: {
+      validator: {
+        $jsonSchema: {
+          bsonType: 'object',
+          required: ['name', 'category', 'quantity', 'unitPrice'],
+          properties: {
+            name: { bsonType: 'string' },
+            category: {
+              enum: ['medication', 'supply', 'food', 'equipment', 'other'],
+              description: 'must be a valid category'
+            },
+            quantity: { bsonType: 'int', minimum: 0 },
+            unitPrice: { bsonType: 'double', minimum: 0 },
+            supplier: { bsonType: 'string' },
+            reorderLevel: { bsonType: 'int', minimum: 0 },
+            isActive: { bsonType: 'bool' }
+          }
+        }
+      }
+    }
+  }
+];
+
+// Create collections if they don't exist
+collections.forEach(function (col) {
+  const existingCollections = db.getCollectionNames();
+  if (existingCollections.indexOf(col.name) === -1) {
+    db.createCollection(col.name, col.options);
+    print('✓ Created collection: ' + col.name);
+  } else {
+    print('− Collection already exists: ' + col.name);
+  }
+});
+
+// =============================================================================
+// Indexes
+// =============================================================================
+// Indexes are critical for production performance. Created here to ensure
+// they exist from day one.
+
+// Users indexes
+db.users.createIndex({ email: 1 }, { unique: true });
+db.users.createIndex({ role: 1 });
+
+// Owners indexes
+db.owners.createIndex({ email: 1 }, { unique: true });
+db.owners.createIndex({ lastName: 1 });
+db.owners.createIndex({ phone: 1 });
+
+// Pets indexes
+db.pets.createIndex({ ownerId: 1 });
+db.pets.createIndex({ name: 1, ownerId: 1 });
+db.pets.createIndex({ species: 1 });
+db.pets.createIndex({ microchipId: 1 }, { sparse: true });
+
+// Appointments indexes
+db.appointments.createIndex({ date: 1, time: 1 });
+db.appointments.createIndex({ petId: 1, date: 1 });
+db.appointments.createIndex({ ownerId: 1 });
+db.appointments.createIndex({ veterinarianId: 1, date: 1 });
+db.appointments.createIndex({ status: 1, date: 1 });
+
+// Medical records indexes
+db.medical_records.createIndex({ petId: 1, createdAt: -1 });
+db.medical_records.createIndex({ appointmentId: 1 }, { unique: true });
+
+// Inventory indexes
+db.inventory.createIndex({ name: 1 });
+db.inventory.createIndex({ category: 1 });
+db.inventory.createIndex({ quantity: 1 });
+
+print('✓ All indexes created successfully.');
+
+// =============================================================================
+// Seed Data — Development Users
+// =============================================================================
+// Insert a default admin user for development if the users collection is empty.
+
+if (db.users.countDocuments() === 0) {
+  db.users.insertOne({
+    email: 'admin@petcare.com',
+    password: '$2b$10$placeholder', // Will be updated when backend generates proper hash
+    firstName: 'Admin',
+    lastName: 'PetCare',
+    role: 'admin',
+    isActive: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  });
+  print('✓ Seed data: default admin user created (admin@petcare.com)');
+} else {
+  print('− Seed data skipped: users collection already contains data.');
+}
+
+print('');
+print('╔══════════════════════════════════════════════════════════════╗');
+print('║  PetCare MongoDB initialization completed successfully!     ║');
+print('╚══════════════════════════════════════════════════════════════╝');
