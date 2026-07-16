@@ -65,8 +65,8 @@ export async function listOwners(
   // Build query filter
   const query: Record<string, unknown> = {};
 
-  // Default to showing active owners unless explicitly asked otherwise
-  if (isActive === undefined || isActive === true) {
+  // Only filter by isActive when explicitly requested
+  if (isActive === true) {
     query.isActive = true;
   } else if (isActive === false) {
     query.isActive = false;

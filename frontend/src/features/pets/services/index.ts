@@ -1,12 +1,10 @@
-import { MockPetService } from './MockPetService';
+import { RestPetService } from './RestPetService';
 import type { PetService } from './PetService';
 
 /**
  * Active PetService implementation.
  *
- * To switch to a real API:
- *   1. Create `RestPetService` implementing `PetService`
- *   2. Change this export to `RestPetService`
- *   → No UI components need to change.
+ * Uses the real REST API backend. JWT auth token is read from
+ * localStorage automatically by RestPetService.
  */
-export const petService: PetService = new MockPetService();
+export const petService: PetService = new RestPetService();

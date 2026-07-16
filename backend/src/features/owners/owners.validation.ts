@@ -124,6 +124,7 @@ export const updateOwnerSchema = z.object({
     .max(1000, 'Notes must be at most 1000 characters')
     .trim()
     .optional(),
+  isActive: z.boolean().optional(),
 });
 
 export const ownerQuerySchema = z.object({

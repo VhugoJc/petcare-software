@@ -47,57 +47,11 @@ const collections = [
   },
   {
     name: 'owners',
-    options: {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          required: ['firstName', 'lastName', 'email', 'phone'],
-          properties: {
-            firstName: { bsonType: 'string' },
-            lastName: { bsonType: 'string' },
-            email: { bsonType: 'string' },
-            phone: { bsonType: 'string' },
-            address: {
-              bsonType: 'object',
-              properties: {
-                street: { bsonType: 'string' },
-                city: { bsonType: 'string' },
-                state: { bsonType: 'string' },
-                zipCode: { bsonType: 'string' }
-              }
-            },
-            isActive: { bsonType: 'bool' }
-          }
-        }
-      }
-    }
+    options: {},
   },
   {
     name: 'pets',
-    options: {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          required: ['name', 'species', 'ownerId'],
-          properties: {
-            name: { bsonType: 'string' },
-            species: {
-              enum: ['dog', 'cat', 'bird', 'rabbit', 'hamster', 'reptile', 'other'],
-              description: 'must be a valid species'
-            },
-            breed: { bsonType: 'string' },
-            birthDate: { bsonType: 'date' },
-            weight: { bsonType: 'double' },
-            color: { bsonType: 'string' },
-            gender: { enum: ['male', 'female', 'unknown'] },
-            isNeutered: { bsonType: 'bool' },
-            microchipId: { bsonType: 'string' },
-            ownerId: { bsonType: 'objectId', description: 'reference to owners collection' },
-            isActive: { bsonType: 'bool' }
-          }
-        }
-      }
-    }
+    options: {},
   },
   {
     name: 'appointments',

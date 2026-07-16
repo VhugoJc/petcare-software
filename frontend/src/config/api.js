@@ -13,6 +13,13 @@ export const API_ENDPOINTS = {
     update: (id) => `${API_BASE_URL}/owners/${id}`,
     delete: (id) => `${API_BASE_URL}/owners/${id}`,
   },
+  pets: {
+    list: `${API_BASE_URL}/pets`,
+    create: `${API_BASE_URL}/pets`,
+    detail: (id) => `${API_BASE_URL}/pets/${id}`,
+    update: (id) => `${API_BASE_URL}/pets/${id}`,
+    delete: (id) => `${API_BASE_URL}/pets/${id}`,
+  },
 };
 
 export default API_BASE_URL;
