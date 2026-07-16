@@ -1,12 +1,9 @@
-import { MockAuthService } from './MockAuthService';
+import { RestAuthService } from './RestAuthService';
 import type { AuthService } from './AuthService';
 
 /**
  * Active AuthService implementation.
  *
- * To switch to a real API:
- *   1. Create `RestAuthService` implementing `AuthService`
- *   2. Change this export to `RestAuthService`
- *   → No UI components need to change.
+ * Uses the real REST API backend.
  */
-export const authService: AuthService = new MockAuthService();
+export const authService: AuthService = new RestAuthService();

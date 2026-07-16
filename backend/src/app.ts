@@ -18,9 +18,18 @@ export function createApp(): express.Application {
   app.use(helmet());
 
   // ---------- CORS ----------
+  const allowedOrigins = config.CORS_ORIGIN.split(',').map((o) => o.trim());
   app.use(
     cors({
-      origin: config.CORS_ORIGIN,
+      origin: (origin, callback) => {
+        // Allow requests with no origin (mobile apps, curl, server-to-server)
+        // In development, reflect the requesting origin
+        if (!origin || config.NODE_ENV === 'development' || allowedOrigins.includes(origin)) {
+          callback(null, origin || true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,

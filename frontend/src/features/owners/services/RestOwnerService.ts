@@ -1,6 +1,7 @@
 import type { OwnerService } from './OwnerService';
 import type { Owner, CreateOwnerInput, UpdateOwnerInput, OwnerFilters, PaginatedResult } from '../types';
 import { API_ENDPOINTS } from '../../../config/api';
+import { tokenStorage } from '../../auth/utils/tokenStorage';
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -18,7 +19,7 @@ class RestOwnerServiceError extends Error {
 
 function getAuthHeaders(): Record<string, string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  const token = localStorage.getItem('auth_token');
+  const token = tokenStorage.getAccessToken();
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
