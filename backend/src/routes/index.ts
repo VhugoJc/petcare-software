@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { healthRoutes } from '../features/health/health.routes';
 import { authRoutes } from '../features/auth/auth.routes';
+import { ownerRoutes } from '../features/owners/owners.routes';
 
 const router = Router();
 
@@ -10,9 +11,10 @@ router.use('/health', healthRoutes);
 // Authentication
 router.use('/auth', authRoutes);
 
+// Owners
+router.use('/owners', ownerRoutes);
+
 // Future feature modules will be mounted here:
-// router.use('/users', userRoutes);
-// router.use('/owners', ownerRoutes);
 // router.use('/pets', petRoutes);
 // router.use('/appointments', appointmentRoutes);
 

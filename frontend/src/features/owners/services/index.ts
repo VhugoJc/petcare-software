@@ -1,12 +1,10 @@
-import { MockOwnerService } from './MockOwnerService';
+import { RestOwnerService } from './RestOwnerService';
 import type { OwnerService } from './OwnerService';
 
 /**
  * Active OwnerService implementation.
  *
- * To switch to a real API:
- *   1. Create `RestOwnerService` implementing `OwnerService`
- *   2. Change this export to `RestOwnerService`
- *   → No UI components need to change.
+ * Uses the real REST API backend. JWT auth token is read from
+ * localStorage automatically by RestOwnerService.
  */
-export const ownerService: OwnerService = new MockOwnerService();
+export const ownerService: OwnerService = new RestOwnerService();
