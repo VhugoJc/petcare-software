@@ -164,23 +164,12 @@ print('✓ All indexes created successfully.');
 // =============================================================================
 // Seed Data — Development Users
 // =============================================================================
-// Insert a default admin user for development if the users collection is empty.
+// The default admin user (admin@petcare.com / admin123) is created by the
+// backend on startup (see auth.service.ts → seedAdminUser) using proper
+// bcrypt hashing. This init script only creates indexes and schemas.
+// =============================================================================
 
-if (db.users.countDocuments() === 0) {
-  db.users.insertOne({
-    email: 'admin@petcare.com',
-    password: '$2b$10$placeholder', // Will be updated when backend generates proper hash
-    firstName: 'Admin',
-    lastName: 'PetCare',
-    role: 'admin',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  });
-  print('✓ Seed data: default admin user created (admin@petcare.com)');
-} else {
-  print('− Seed data skipped: users collection already contains data.');
-}
+print('− User seed data deferred to backend application startup.');
 
 print('');
 print('╔══════════════════════════════════════════════════════════════╗');

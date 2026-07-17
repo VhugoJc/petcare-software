@@ -1,0 +1,31 @@
+# =============================================================================
+# PetCare Frontend — .dockerignore
+# =============================================================================
+# Exclude files and directories from the Docker build context to keep images
+# small and prevent secrets from leaking into the image.
+# =============================================================================
+
+# Dependencies (rebuilt inside the container)
+node_modules
+
+# Build output (rebuilt inside the container)
+dist
+
+# Environment files (contain secrets — must not be in the image)
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore

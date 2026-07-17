@@ -1,11 +1,20 @@
 import dotenv from 'dotenv';
 import { z, ZodError } from 'zod';
 import path from 'path';
+import fs from 'fs';
 
-// Load .env files — backend/.env takes priority over root .env
-// This allows local dev to override Docker hostnames with localhost.
-dotenv.config({ path: path.resolve(__dirname, '../.env'), override: false });
-dotenv.config({ path: path.resolve(__dirname, '../../.env'), override: false });
+// Load .env files if they exist — backend/.env takes priority over root .env.
+// In Docker, environment variables are provided by docker-compose, so these
+// calls are no-ops when the files don't exist (e.g. in CI or production).
+const backendEnv = path.resolve(__dirname, '../.env');
+const rootEnv = path.resolve(__dirname, '../../.env');
+
+if (fs.existsSync(backendEnv)) {
+  dotenv.config({ path: backendEnv, override: false });
+}
+if (fs.existsSync(rootEnv)) {
+  dotenv.config({ path: rootEnv, override: false });
+}
 
 const envSchema = z.object({
   // Node environment
