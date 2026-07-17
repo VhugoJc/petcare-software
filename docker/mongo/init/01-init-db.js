@@ -55,28 +55,7 @@ const collections = [
   },
   {
     name: 'appointments',
-    options: {
-      validator: {
-        $jsonSchema: {
-          bsonType: 'object',
-          required: ['petId', 'ownerId', 'date', 'time', 'reason', 'status', 'veterinarianId'],
-          properties: {
-            petId: { bsonType: 'objectId' },
-            ownerId: { bsonType: 'objectId' },
-            date: { bsonType: 'date' },
-            time: { bsonType: 'string' },
-            reason: { bsonType: 'string' },
-            status: {
-              enum: ['scheduled', 'confirmed', 'in-progress', 'completed', 'cancelled', 'no-show'],
-              description: 'must be a valid appointment status'
-            },
-            veterinarianId: { bsonType: 'objectId' },
-            notes: { bsonType: 'string' },
-            isActive: { bsonType: 'bool' }
-          }
-        }
-      }
-    }
+    options: {},
   },
   {
     name: 'medical_records',

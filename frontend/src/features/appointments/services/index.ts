@@ -1,4 +1,10 @@
-import { MockAppointmentService } from './MockAppointmentService';
+import { RestAppointmentService } from './RestAppointmentService';
 import type { AppointmentService } from './AppointmentService';
 
-export const appointmentService: AppointmentService = new MockAppointmentService();
+/**
+ * Active AppointmentService implementation.
+ *
+ * Uses the real REST API backend. JWT auth token is read from
+ * localStorage automatically by RestAppointmentService.
+ */
+export const appointmentService: AppointmentService = new RestAppointmentService();
