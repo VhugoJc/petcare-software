@@ -1,4 +1,4 @@
-import { MockDashboardService } from './MockDashboardService';
+import { RestDashboardService } from './RestDashboardService';
 import type { DashboardService } from './DashboardService';
 
-export const dashboardService: DashboardService = new MockDashboardService();
+export const dashboardService: DashboardService = new RestDashboardService();

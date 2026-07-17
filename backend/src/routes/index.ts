@@ -4,6 +4,7 @@ import { authRoutes } from '../features/auth/auth.routes';
 import { ownerRoutes } from '../features/owners/owners.routes';
 import { petRoutes } from '../features/pets/pets.routes';
 import { appointmentRoutes } from '../features/appointments/appointments.routes';
+import { dashboardRoutes } from '../features/dashboard/dashboard.routes';
 
 const router = Router();
 
@@ -21,5 +22,8 @@ router.use('/pets', petRoutes);
 
 // Appointments
 router.use('/appointments', appointmentRoutes);
+
+// Dashboard
+router.use('/dashboard', dashboardRoutes);
 
 export { router as apiRoutes };

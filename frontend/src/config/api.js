@@ -28,6 +28,9 @@ export const API_ENDPOINTS = {
     status: (id) => `${API_BASE_URL}/appointments/${id}/status`,
     delete: (id) => `${API_BASE_URL}/appointments/${id}`,
   },
+  dashboard: {
+    get: `${API_BASE_URL}/dashboard`,
+  },
 };
 
 export default API_BASE_URL;
