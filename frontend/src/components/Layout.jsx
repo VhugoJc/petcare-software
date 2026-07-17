@@ -10,7 +10,7 @@ const MENU_ITEMS = [
   { label: 'Appointments', icon: <CalendarMonth />, id: 'appointments', path: '/appointments' },
   { label: 'Owners', icon: <ContactPage />, id: 'owners', path: '/owners' },
   { label: 'Pets', icon: <Pets />, id: 'pets', path: '/pets' },
-  { label: 'Users', icon: <People />, id: 'users', path: '/users' },
+  // { label: 'Users', icon: <People />, id: 'users', path: '/users' },
   { label: 'Settings', icon: <Settings />, id: 'settings', path: '/settings' },
 ];
 
