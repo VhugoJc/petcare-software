@@ -14,6 +14,7 @@ import { OwnersPage } from './features/owners/components/OwnersPage';
 import { PetsPage } from './features/pets/components/PetsPage';
 import { PetProfilePage } from './features/pets/components/PetProfilePage';
 import { AppointmentsPage } from './features/appointments/components/AppointmentsPage';
+import { SettingsPage } from './features/settings/SettingsPage';
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
           <Route path="/pets/:id" element={<PetProfilePage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/settings" element={<SettingsPlaceholder />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/users" replace />} />
@@ -129,15 +130,5 @@ function UserManagementPage() {
 /*  Placeholder pages for future sprints                              */
 /* ------------------------------------------------------------------ */
 
-function SettingsPlaceholder() {
-  return (
-    <Box sx={{ textAlign: 'center', py: 8 }}>
-      <Typography variant="h2">Settings</Typography>
-      <Typography variant="body1" sx={{ mt: 1, color: '#6b6375' }}>
-        Settings coming soon.
-      </Typography>
-    </Box>
-  );
-}
 
 export default App;

@@ -31,6 +31,10 @@ export const API_ENDPOINTS = {
   dashboard: {
     get: `${API_BASE_URL}/dashboard`,
   },
+  settings: {
+    get: `${API_BASE_URL}/settings`,
+    update: `${API_BASE_URL}/settings`,
+  },
 };
 
 export default API_BASE_URL;
