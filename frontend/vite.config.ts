@@ -9,6 +9,7 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    allowedHosts: true,
 
     // Enable polling for hot reload inside Docker (file system events
     // don't always propagate across container boundaries on macOS/Windows)
