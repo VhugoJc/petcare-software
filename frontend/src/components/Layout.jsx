@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Divider, Avatar, Menu, MenuItem } from '@mui/material';
-import { Dashboard, People, Pets, Settings, Logout, Menu as MenuIcon, ContactPage, CalendarMonth } from '@mui/icons-material';
+import { Dashboard, Pets, Settings, Logout, Menu as MenuIcon, ContactPage, CalendarMonth } from '@mui/icons-material';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../features/auth/hooks/useAuth';

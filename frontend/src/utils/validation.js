@@ -1,5 +1,5 @@
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_REGEX = /^[\d\s\-\+\(\)]*$/;
+const PHONE_REGEX = /^[\d\s\-+()]*$/;
 
 export const isValidEmail = (email) => EMAIL_REGEX.test(email);
 

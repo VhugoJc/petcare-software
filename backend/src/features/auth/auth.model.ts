@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import type { IUserDocument } from './types/index';
 
@@ -45,7 +45,7 @@ const userSchema = new Schema<IUserDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform(_doc: any, ret: Record<string, unknown>) {
+      transform(_doc: Document, ret: Record<string, unknown>) {
         ret.id = String(ret._id);
         delete ret._id;
         delete ret.__v;
@@ -61,7 +61,7 @@ const userSchema = new Schema<IUserDocument>(
 userSchema.index({ role: 1 });
 
 // ---------- Pre-save hook: hash password ----------
-userSchema.pre('save', async function () {
+userSchema.pre('save', async function (this: IUserDocument) {
   if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(SALT_ROUNDS);
   this.password = await bcrypt.hash(this.password, salt);

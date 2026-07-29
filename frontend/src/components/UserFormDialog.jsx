@@ -1,12 +1,8 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export const UserFormDialog = ({ open, onClose, onSubmit, user = null }) => {
   const [form, setForm] = useState({ name: '', email: '', phone: '' });
-
-  useEffect(() => {
-    setForm(user || { name: '', email: '', phone: '' });
-  }, [user, open]);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 

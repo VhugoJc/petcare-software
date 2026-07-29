@@ -44,7 +44,7 @@ function toPetResponse(doc: Record<string, unknown>, ownerName: string): PetResp
 export async function createPet(input: CreatePetInput): Promise<PetResponse> {
   const ownerName = await resolveOwnerName(input.ownerId);
   const pet = await Pet.create(input);
-  return toPetResponse(pet.toJSON() as Record<string, unknown>, ownerName);
+  return toPetResponse(pet.toJSON() as unknown as Record<string, unknown>, ownerName);
 }
 
 export async function getPetById(id: string): Promise<PetResponse> {
@@ -53,7 +53,7 @@ export async function getPetById(id: string): Promise<PetResponse> {
     throw AppError.notFound('Pet not found');
   }
   const ownerName = await resolveOwnerName(String(pet.ownerId));
-  return toPetResponse(pet.toJSON() as Record<string, unknown>, ownerName);
+  return toPetResponse(pet.toJSON() as unknown as Record<string, unknown>, ownerName);
 }
 
 export async function listPets(
@@ -91,7 +91,7 @@ export async function listPets(
   }
 
   // Text search: if search includes owner name, resolve owner IDs first
-  let ownerIdsForSearch: string[] | null = null;
+  let ownerIdsForSearch: string[] | undefined;
   if (search) {
     const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -160,7 +160,7 @@ export async function updatePet(id: string, input: UpdatePetInput): Promise<PetR
   }
 
   const ownerName = await resolveOwnerName(String(pet.ownerId));
-  return toPetResponse(pet.toJSON() as Record<string, unknown>, ownerName);
+  return toPetResponse(pet.toJSON() as unknown as Record<string, unknown>, ownerName);
 }
 
 export async function deletePet(id: string): Promise<void> {
