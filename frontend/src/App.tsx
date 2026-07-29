@@ -110,6 +110,7 @@ function UserManagementPage() {
 
       {/* Form Dialog */}
       <UserFormDialog
+        key={selectedUser ? selectedUser.id : 'create'}
         open={dialogOpen}
         onClose={handleCloseDialog}
         onSubmit={handleFormSubmit}
