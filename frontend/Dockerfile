@@ -3,7 +3,7 @@
 # =============================================================================
 # Targets:
 #   dev   — Hot-reload development server (Vite HMR)
-#   prod  — Optimized production build served by Vite preview
+#   prod  — Optimized production build served by nginx
 #
 # Usage:
 #   docker build --target dev  -t petcare-frontend:dev  .
@@ -54,19 +54,24 @@ ENV NODE_ENV=development
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
 # ---------------------------------------------------------------------------
-# Production — serve the optimized build
+# Production — serve static files with nginx
 # ---------------------------------------------------------------------------
-FROM node:22-alpine AS prod
+FROM nginx:alpine AS prod
 
-WORKDIR /app
+# Remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy the built assets from the build stage
-COPY --from=build /app/dist ./dist
+# Copy our built frontend from the build stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy package.json and vite config so we can use vite preview
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/vite.config.ts ./vite.config.ts
+# Copy custom nginx configuration for SPA routing
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+ENV NODE_ENV=production
+
+CMD ["nginx", "-g", "daemon off;"]
 
 # Create a non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
