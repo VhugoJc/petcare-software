@@ -91,7 +91,7 @@ export async function listPets(
   }
 
   // Text search: if search includes owner name, resolve owner IDs first
-  let ownerIdsForSearch: string[] | null = null;
+  let ownerIdsForSearch: string[] | undefined;
   if (search) {
     const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 

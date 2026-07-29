@@ -2,6 +2,8 @@ import { Owner } from '../owners/owners.model';
 import { Pet } from '../pets/pets.model';
 import { Appointment } from '../appointments/appointments.model';
 import type { DashboardResponse } from './types/index';
+import type { OwnerResponse } from '../owners/types/index';
+import type { AppointmentResponse } from '../appointments/types/index';
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -88,15 +90,15 @@ export async function getDashboard(): Promise<DashboardResponse> {
       lastName: o.lastName,
       email: o.email,
       phoneNumber: o.phoneNumber,
-      emergencyContact: (o as any).emergencyContact,
-      address: (o as any).address,
-      city: (o as any).city,
-      state: (o as any).state,
-      country: (o as any).country,
-      postalCode: (o as any).postalCode,
-      preferredContactMethod: (o as any).preferredContactMethod ?? 'email',
-      notes: (o as any).notes,
-      isActive: (o as any).isActive ?? true,
+      emergencyContact: o.emergencyContact as string | undefined,
+      address: o.address as string | undefined,
+      city: o.city as string | undefined,
+      state: o.state as string | undefined,
+      country: o.country as string | undefined,
+      postalCode: o.postalCode as string | undefined,
+      preferredContactMethod: (o.preferredContactMethod ?? 'email') as OwnerResponse['preferredContactMethod'],
+      notes: o.notes as string | undefined,
+      isActive: (o.isActive ?? true) as boolean,
       createdAt: o.createdAt.toISOString(),
       updatedAt: o.updatedAt.toISOString(),
     })),
@@ -113,10 +115,10 @@ export async function getDashboard(): Promise<DashboardResponse> {
         dateOfBirth: p.dateOfBirth.toISOString(),
         sex: p.sex as 'male' | 'female',
         isNeutered: p.isNeutered,
-        microchipId: (p as any).microchipId,
-        weightKg: (p as any).weightKg,
-        notes: (p as any).notes,
-        isActive: (p as any).isActive ?? true,
+        microchipId: p.microchipId as string | undefined,
+        weightKg: p.weightKg as number | undefined,
+        notes: p.notes as string | undefined,
+        isActive: (p.isActive ?? true) as boolean,
         createdAt: p.createdAt.toISOString(),
         updatedAt: p.updatedAt.toISOString(),
       };
@@ -137,9 +139,9 @@ export async function getDashboard(): Promise<DashboardResponse> {
         startTime: a.startTime,
         endTime: a.endTime,
         reason: a.reason,
-        type: a.type as any,
-        status: a.status as any,
-        notes: (a as any).notes,
+        type: a.type as AppointmentResponse['type'],
+        status: a.status as AppointmentResponse['status'],
+        notes: a.notes as string | undefined,
         createdAt: a.createdAt.toISOString(),
         updatedAt: a.updatedAt.toISOString(),
       };

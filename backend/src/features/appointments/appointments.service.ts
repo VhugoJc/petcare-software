@@ -163,8 +163,8 @@ export async function listAppointments(
   }
 
   // Text search
-  let ownerIdsForSearch: string[] | null = null;
-  let petIdsForSearch: string[] | null = null;
+  let ownerIdsForSearch: string[] | undefined;
+  let petIdsForSearch: string[] | undefined;
 
   if (search) {
     const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

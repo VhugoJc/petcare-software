@@ -5,6 +5,8 @@ import { AppError } from '../errors/AppError';
 import { getConfig } from '../config/env';
 import { getLogger } from '../config/logger';
 
+interface MongoError extends Error { code?: number; keyValue?: Record<string, unknown>; }
+
 /**
  * Global error handler middleware.
  *
@@ -16,6 +18,7 @@ export function errorHandler(
   err: Error,
   _req: Request,
   res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction
 ): void {
   const logger = getLogger();
@@ -42,9 +45,9 @@ export function errorHandler(
     error = AppError.badRequest(`Invalid ${err.path}: ${err.value}`);
   } else if (err instanceof mongoose.Error.DocumentNotFoundError) {
     error = AppError.notFound('Resource not found');
-  } else if ((err as any).code === 11000) {
+  } else if ((err as MongoError).code === 11000) {
     // MongoDB duplicate key error
-    const keyValue = (err as any).keyValue ?? {};
+    const keyValue = (err as MongoError).keyValue ?? {};
     const fields = Object.keys(keyValue).join(', ');
     error = AppError.conflict(`Duplicate value for: ${fields}`, { fields: keyValue });
   } else if (err instanceof AppError) {
