@@ -82,7 +82,7 @@ export async function createAppointment(input: CreateAppointmentInput): Promise<
 
   const appointment = await Appointment.create(input);
   return toAppointmentResponse(
-    appointment.toJSON() as Record<string, unknown>,
+    appointment.toJSON() as unknown as Record<string, unknown>,
     ownerName,
     petInfo.petName,
     petInfo.petSpecies,
@@ -101,7 +101,7 @@ export async function getAppointmentById(id: string): Promise<AppointmentRespons
   ]);
 
   return toAppointmentResponse(
-    appointment.toJSON() as Record<string, unknown>,
+    appointment.toJSON() as unknown as Record<string, unknown>,
     ownerName,
     petInfo.petName,
     petInfo.petSpecies,
@@ -271,7 +271,7 @@ export async function updateAppointment(
   ]);
 
   return toAppointmentResponse(
-    appointment.toJSON() as Record<string, unknown>,
+    appointment.toJSON() as unknown as Record<string, unknown>,
     ownerName,
     petInfo.petName,
     petInfo.petSpecies,
@@ -305,7 +305,7 @@ export async function updateAppointmentStatus(
   ]);
 
   return toAppointmentResponse(
-    appointment.toJSON() as Record<string, unknown>,
+    appointment.toJSON() as unknown as Record<string, unknown>,
     ownerName,
     petInfo.petName,
     petInfo.petSpecies,

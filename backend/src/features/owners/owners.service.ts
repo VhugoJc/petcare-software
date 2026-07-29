@@ -39,7 +39,7 @@ export async function createOwner(input: CreateOwnerInput): Promise<OwnerRespons
   }
 
   const owner = await Owner.create(input);
-  return toOwnerResponse(owner.toJSON() as Record<string, unknown>);
+  return toOwnerResponse(owner.toJSON() as unknown as Record<string, unknown>);
 }
 
 export async function getOwnerById(id: string): Promise<OwnerResponse> {
@@ -47,7 +47,7 @@ export async function getOwnerById(id: string): Promise<OwnerResponse> {
   if (!owner) {
     throw AppError.notFound('Owner not found');
   }
-  return toOwnerResponse(owner.toJSON() as Record<string, unknown>);
+  return toOwnerResponse(owner.toJSON() as unknown as Record<string, unknown>);
 }
 
 export async function listOwners(
@@ -117,7 +117,7 @@ export async function updateOwner(
   if (!owner) {
     throw AppError.notFound('Owner not found');
   }
-  return toOwnerResponse(owner.toJSON() as Record<string, unknown>);
+  return toOwnerResponse(owner.toJSON() as unknown as Record<string, unknown>);
 }
 
 export async function deleteOwner(id: string): Promise<void> {
