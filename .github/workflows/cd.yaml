@@ -19,8 +19,11 @@ jobs:
 
       - name: Build and Push Docker Image - Backend
         run: |
-          docker build --target prod -t ${{ secrets.DOCKER_USERNAME }}/petcare-backend:develop ./backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/petcare-backend:develop
+          docker build --target prod \
+            -t ${{ secrets.DOCKER_USERNAME }}/petcare-backend:develop \
+            -t ${{ secrets.DOCKER_USERNAME }}/petcare-backend:develop-${{ github.sha }} \
+            ./backend
+          docker push --all-tags ${{ secrets.DOCKER_USERNAME }}/petcare-backend
 
   frontend:
     name: Deploy Petcare Frontend
@@ -37,5 +40,8 @@ jobs:
 
       - name: Build and Push Docker Image - Frontend
         run: |
-          docker build --target prod -t ${{ secrets.DOCKER_USERNAME }}/petcare-frontend:develop ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/petcare-frontend:develop
+          docker build --target prod \
+            -t ${{ secrets.DOCKER_USERNAME }}/petcare-frontend:develop \
+            -t ${{ secrets.DOCKER_USERNAME }}/petcare-frontend:develop-${{ github.sha }} \
+            ./frontend
+          docker push --all-tags ${{ secrets.DOCKER_USERNAME }}/petcare-frontend
